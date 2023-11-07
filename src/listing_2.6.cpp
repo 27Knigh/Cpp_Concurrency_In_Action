@@ -1,5 +1,7 @@
+/*scoped_thread的实现*/
 #include <thread>
 #include <utility>
+#include <stdexcept>//引入std::logic_error的头文件
 
 class scoped_thread
 {

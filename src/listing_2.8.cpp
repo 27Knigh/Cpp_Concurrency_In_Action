@@ -1,3 +1,4 @@
+/*运行时决定线程数量*/
 #include <thread>
 #include <numeric>
 #include <algorithm>
@@ -10,14 +11,14 @@ struct accumulate_block
 {
     void operator()(Iterator first,Iterator last,T& result)
     {
-        result=std::accumulate(first,last,result);
+        result=std::accumulate(first,last,result);//将区间[first,last)的值，累加到初值result
     }
 };
 
 template<typename Iterator,typename T>
 T parallel_accumulate(Iterator first,Iterator last,T init)
 {
-    unsigned long const length=std::distance(first,last);
+    unsigned long const length=std::distance(first,last); //求区间[first,last)的元素个数
 
     if(!length)
         return init;
@@ -25,9 +26,9 @@ T parallel_accumulate(Iterator first,Iterator last,T init)
     unsigned long const min_per_thread=25;
     unsigned long const max_threads=
         (length+min_per_thread-1)/min_per_thread;
-
-    unsigned long const hardware_threads=
-        std::thread::hardware_concurrency();
+    //用于获取系统支持的并行线程数（即CPU核心的数量）。
+    //这个函数通常用于确定系统上可以有效利用的线程数量，以便进行并行处理和多线程编程。
+    unsigned long const hardware_threads=std::thread::hardware_concurrency();
 
     unsigned long const num_threads=
         std::min(hardware_threads!=0?hardware_threads:2,max_threads);
@@ -41,7 +42,7 @@ T parallel_accumulate(Iterator first,Iterator last,T init)
     for(unsigned long i=0;i<(num_threads-1);++i)
     {
         Iterator block_end=block_start;
-        std::advance(block_end,block_size);
+        std::advance(block_end,block_size);//将迭代器block_end前进（正值）或后退（负值）block_size的距离
         threads[i]=std::thread(
             accumulate_block<Iterator,T>(),
             block_start,block_end,std::ref(results[i]));

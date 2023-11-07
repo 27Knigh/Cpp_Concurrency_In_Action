@@ -1,3 +1,4 @@
+/*使用分离线程去处理其他文档*/
 #include <thread>
 #include <string>
 

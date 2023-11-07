@@ -1,3 +1,4 @@
+/*等待线程完成的一种解决办法，在try/catch块中，使用join*/
 #include <thread>
 
 void do_something(int& i)

@@ -1,3 +1,4 @@
+/*函数返回std::thread对象*/
 #include <thread>
 
 void some_function()
@@ -20,6 +21,7 @@ std::thread g()
 
 int main()
 {
+    //因为函数返回值是右值
     std::thread t1=f();
     t1.join();
     std::thread t2=g();
